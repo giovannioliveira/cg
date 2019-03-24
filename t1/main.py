@@ -6,16 +6,16 @@ def f(theta):
 
 domain = [0,2*pi]
 npts = 100
-size = 10
 margin = 10
 
-setworldcoordinates(min-margin,min-margin,max+margin,max+margin)
+llx,lly,urx,ury= 4*(.25,)
 ht()
 
 dlen = domain[1]-domain[0]
 dtheta = dlen/npts
 
 theta = 0
+tangle = 0
 mag = f(theta)
 x = mag*cos(theta)
 y = mag*sin(theta)
@@ -44,16 +44,38 @@ for i in range(1,npts+1):
     x = x2
     y = y2
 
-    if(abs(x)>size):
-        setworldcoordinates(min, min, max, max)
-        if(x>max):
-            max=x
-        elif(x<min):
-            min = x
-        if(y>max):
-            max=y
-        elif(y<min):
-            min=y
+    if(urx<x):
+        urx = x
+        auxlenx = urx-llx
+        auxleny = ury - lly
+        auxdiff = auxlenx-auxleny
+        if(auxdiff > 0):
+            ury += auxdiff/2
+            lly -= auxdiff
+    if(x<llx):
+        llx = x
+        auxlenx = urx-llx
+        auxleny = ury - lly
+        auxdiff = auxlenx-auxleny
+        if(auxdiff > 0):
+            ury += auxdiff/2
+            lly -= auxdiff
+    if(ury<y):
+        ury = y
+        auxlenx = urx-llx
+        auxleny = ury - lly
+        auxdiff = auxleny-auxlenx
+        if(auxdiff > 0):
+            urx += auxdiff/2
+            llx -= auxdiff
+    if(y<lly):
+        lly = y
+        auxlenx = urx-llx
+        auxleny = ury - lly
+        auxdiff = auxleny-auxlenx
+        if(auxdiff > 0):
+            urx += auxdiff/2
+            llx -= auxdiff
 
-
+    setworldcoordinates(llx,lly,urx,ury)
 done()
